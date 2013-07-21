@@ -1,0 +1,100 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "ebf85d56945c8c047d0cc0f0492882b5",
+    "packages": [
+        {
+            "name": "brainsware/php-markdown-extra-extended",
+            "version": "0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Brainsware/php-markdown-extra-extended.git",
+                "reference": "0.1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Brainsware/php-markdown-extra-extended/zipball/0.1.0",
+                "reference": "0.1.0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "PHP Markdown & Extra",
+            "homepage": "https://github.com/Brainsware/php-markdown-extra-extended",
+            "keywords": [
+                "markdown"
+            ],
+            "time": "2013-03-14 14:30:35"
+        },
+        {
+            "name": "zweifisch/zf",
+            "version": "v0.6.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/zweifisch/zf.git",
+                "reference": "v0.6.1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/zweifisch/zf/zipball/v0.6.1",
+                "reference": "v0.6.1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "zf": "."
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Feng Zhou",
+                    "email": "zf.pascal@gmail.com"
+                }
+            ],
+            "description": "a micro php web/cli framework/router",
+            "homepage": "https://github.com/zweifisch/zf",
+            "keywords": [
+                "cli",
+                "microframework",
+                "rest",
+                "router"
+            ],
+            "time": "2013-07-08 14:39:50"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": [
+
+    ],
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}
