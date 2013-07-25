@@ -14,15 +14,20 @@
 			<ul class="menu-root">
 			<? foreach($docs as $folder=>$articles): ?>
 			<? if(is_int($folder)): ?>
-				<li> <a href="/<?= $this->as_path($articles)?>"><?= $this->as_title($articles)?></a> </li>
+				<li class="navigation-menu-folder"> <a href="/<?= $this->as_path($articles)?>"><?= $this->as_title($articles)?></a> </li>
 			<? else: ?>
-				<? $folder = $this->as_path($folder) ?>
-				<ul>
-					<a href="/<?= $folder ?>"><?= $this->as_title($folder) ?></a>
-				<? foreach($articles as $article): ?>
-					<li <?= $this->is_current($folder) ? '' : 'style="display:none"' ?> > <a href="/<?= $folder?>/<?=$this->as_path($article)?>"><?= $this->as_title($article) ?></a> </li>
-				<? endforeach ?>
-				</ul>
+				<li class="navigation-menu-folder">
+					<ul>
+						<? $folder_path = $this->as_path($folder) ?>
+						<a href="/<?= $folder_path ?>"><?= $this->as_title($folder) ?></a>
+					<? foreach($articles as $article): ?>
+						<li class="navigation-menu-article" <?= $this->is_current_folder($folder_path) ? '' : 'style="display:none"' ?> >
+							<a class="<?= $this->is_current_article($folder_path, $this->as_path($article))?'current':''?>"
+								href="/<?= $folder_path?>/<?=$this->as_path($article)?>"><?= $this->as_title($article) ?></a>
+						</li>
+					<? endforeach ?>
+					</ul>
+				</li>
 			<? endif ?>
 			<? endforeach ?>
 			</ul>

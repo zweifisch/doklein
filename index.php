@@ -43,27 +43,33 @@ $app->helper->register('as_title', function($path){
 	return str_replace('_', ' ', $this->helper->strip_num($path));
 });
 
-$app->helper->register('is_current', function($folder){
-	if(empty($this->current_folder)) return false;
-	return $this->current_folder == $folder;
+$app->helper->register('is_current_folder', function($folder){
+	if(empty($this->params->folder)) return false;
+	return $this->as_path($this->params->folder) == $folder;
+});
+
+$app->helper->register('is_current_article', function($folder, $article){
+	if(empty($this->params->article)) return false;
+	return $this->as_path($this->params->article) == $article && $this->helper->is_current_folder($folder);
 });
 
 $app->docs = function(){
 	$walk_dir = function($dir, &$ret) use (&$walk_dir){
 		$dh = opendir($dir);
 		while($file = readdir($dh)){
-			if(in_array($file, ['.', '..'])) continue;
+			if(in_array($file, ['.', '..', 'index'.$this->config->extension])) continue;
 			is_dir($dir.DIRECTORY_SEPARATOR.$file)
 				? $walk_dir($dir.DIRECTORY_SEPARATOR.$file, $ret[$file])
 				: $ret[] = basename($file, $this->config->extension);
 		}
+		asort($ret);
 	};
 	$walk_dir($this->config->folder, $ret);
+	ksort($ret);
 	return $ret;
 };
 
 $app->param('folder', function($value){
-	$this->current_folder = $value;
 	$folders = array_keys($this->docs);
 	$value = preg_quote($value);
 	foreach($folders as $folder){
@@ -87,8 +93,7 @@ $app->get('/', function(){
 
 $app->get('/:folder/:article?', function(){
 	if($this->params->folder){
-		$article = $this->params->article ? $this->params->article : 'index';
-		$this->render_md($this->params->folder, $article);
+		$this->render_md($this->params->folder, $this->params->article);
 	}else{
 		$this->send(404);
 	}

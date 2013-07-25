@@ -39,10 +39,9 @@ a {
 }
 a:hover {
     text-decoration: none;
-    color: #ff6600;
 }
 a:visited {
-    color: purple;
+    color: #0099ff;
 }
 ul, ol {
     padding: 0;
@@ -262,6 +261,46 @@ button::-moz-focus-inner {
 .navigation-menu{
 	float:left;
 	min-width:200px;
+}
+
+.navigation-menu ul{
+	margin-left:0;
+}
+
+.navigation-menu a{
+	text-decoration:none;
+	color:#444;
+}
+
+.navigation-menu a.current{
+	color:#0099ff;
+}
+
+.navigation-menu a.current:visited{
+	color:#0099ff;
+}
+
+.navigation-menu a:visited{
+	color:#444;
+}
+
+.navigation-menu-folder{
+	text-decoration:none;
+	list-style: none outside none;
+}
+
+.navigation-menu-folder a{
+	font-weight:bold;
+}
+
+.navigation-menu-article{
+	list-style: none outside none;
+	font-size: 15px;
+	text-indent: 0.5em;
+}
+
+.navigation-menu-article a{
+	font-weight:normal;
 }
 
 .main-content{
