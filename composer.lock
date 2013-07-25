@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "ebf85d56945c8c047d0cc0f0492882b5",
+    "hash": "f34f4457fac2f975e040552db0b6884b",
     "packages": [
         {
             "name": "brainsware/php-markdown-extra-extended",
@@ -36,16 +36,16 @@
         },
         {
             "name": "zweifisch/zf",
-            "version": "v0.6.1",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/zweifisch/zf.git",
-                "reference": "v0.6.1"
+                "reference": "f08f2fffbdf6d924b54a11760515cff79c8ab6be"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zweifisch/zf/zipball/v0.6.1",
-                "reference": "v0.6.1",
+                "url": "https://api.github.com/repos/zweifisch/zf/zipball/f08f2fffbdf6d924b54a11760515cff79c8ab6be",
+                "reference": "f08f2fffbdf6d924b54a11760515cff79c8ab6be",
                 "shasum": ""
             },
             "require": {
@@ -78,7 +78,7 @@
                 "rest",
                 "router"
             ],
-            "time": "2013-07-08 14:39:50"
+            "time": "2013-07-24 09:31:00"
         }
     ],
     "packages-dev": [
@@ -88,9 +88,9 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "zweifisch/zf": 20
+    },
     "platform": [
 
     ],

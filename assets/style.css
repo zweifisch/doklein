@@ -3,7 +3,6 @@ body{
     font-family: Georgia, Palatino, serif;
     color: #444444;
     line-height: 1;
-    max-width: 960px;
     padding: 30px;
 }
 h1, h2, h3, h4 {
@@ -257,4 +256,15 @@ button:active {
 button::-moz-focus-inner {
   padding: 0;
   border: 0;
+}
+
+
+.navigation-menu{
+	float:left;
+	min-width:200px;
+}
+
+.main-content{
+	float:left;
+	width: 700px; 
 }

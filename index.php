@@ -1,11 +1,9 @@
 <?php
 
 require 'vendor/autoload.php';
-
 require 'vendor/brainsware/php-markdown-extra-extended/markdown_extended.php';
 
 $app = new zf\App;
-
 
 $app->helper->register('path_constructor', function($root_path){
 	return function($path_segments) use($root_path){
@@ -20,23 +18,35 @@ $app->helper->register('get_path', function($path_segments){
 });
 
 $app->helper->register('render_md', function(){
-	$path = $this->get_path(func_get_args()) . $this->config->extension;
+	$args = func_get_args();
+	$asString = is_bool($args[func_num_args() - 1]) ? array_pop($args) : false;
+	$path = $this->get_path($args) . $this->config->extension;
 	if(is_readable($path)){
 		$content = MarkdownExtended(file_get_contents($path));
-		$this->render('template',['content'=>$content]);
-	}else{
-		$this->send(404);
+		if($asString){
+			return $this->renderAsString('template',['content'=>$content]);
+		}else{
+			$this->render('template',['content'=>$content, 'docs'=>$this->docs]);
+		}
 	}
 });
 
-$app->helper->register('render_md_as_str', Function(){
-	$path = $this->get_path(func_get_args()) . $this->config->extension;
-	if(is_readable($path)){
-		$content = MarkdownExtended(file_get_contents($path));
-		return $this->renderAsString('template',['content'=>$content]);
-	}
+$app->helper->register('strip_num', function($input){
+	return is_numeric(strstr($input, '_', true)) ? substr(strstr($input, '_'), 1) : $input;
 });
 
+$app->helper->register('as_path', function($path){
+	return strtolower($this->helper->strip_num($path));
+});
+
+$app->helper->register('as_title', function($path){
+	return str_replace('_', ' ', $this->helper->strip_num($path));
+});
+
+$app->helper->register('is_current', function($folder){
+	if(empty($this->current_folder)) return false;
+	return $this->current_folder == $folder;
+});
 
 $app->docs = function(){
 	$walk_dir = function($dir, &$ret) use (&$walk_dir){
@@ -53,6 +63,7 @@ $app->docs = function(){
 };
 
 $app->param('folder', function($value){
+	$this->current_folder = $value;
 	$folders = array_keys($this->docs);
 	$value = preg_quote($value);
 	foreach($folders as $folder){
@@ -71,7 +82,7 @@ $app->param('article', function($value){
 });
 
 $app->get('/', function(){
-	$this->render_md('index');
+	$this->render_md('index') or $this->send(404);
 });
 
 $app->get('/:folder/:article?', function(){
@@ -102,7 +113,7 @@ $app->cmd('export <path>', function(){
 		$this->log('processing %s%s', $article, $this->config->extension);
 		$path = $get_target_path([$article.$this->config->export_extension]);
 		is_dir(dirname($path)) or mkdir(dirname($path), 0755, true);
-		file_put_contents($path, $this->render_md_as_str($article));
+		file_put_contents($path, $this->render_md($article, true));
 	}
 	
 });
