@@ -261,6 +261,7 @@ button::-moz-focus-inner {
 .navigation-menu{
 	float:left;
 	min-width:200px;
+	margin-top: 24px;
 }
 
 .navigation-menu ul{

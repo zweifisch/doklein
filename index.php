@@ -8,7 +8,7 @@ $app = new zf\App;
 $app->helper->register('path_constructor', function($root_path){
 	return function($path_segments) use($root_path){
 		return $root_path.DIRECTORY_SEPARATOR.
-			implode(DIRECTORY_SEPARATOR, $path_segments);
+			implode(DIRECTORY_SEPARATOR, array_filter($path_segments, function($x){return !empty($x);}));
 	};
 });
 
@@ -17,16 +17,16 @@ $app->helper->register('get_path', function($path_segments){
 		implode(DIRECTORY_SEPARATOR, $path_segments);
 });
 
-$app->helper->register('render_md', function(){
-	$args = func_get_args();
-	$asString = is_bool($args[func_num_args() - 1]) ? array_pop($args) : false;
-	$path = $this->get_path($args) . $this->config->extension;
+$app->helper->register('render_md', function($path, $vars=[], $return=false){
+	$path = $this->get_path(explode('/', $path)) . $this->config->extension;
 	if(is_readable($path)){
 		$content = MarkdownExtended(file_get_contents($path));
-		if($asString){
-			return $this->renderAsString('template',['content'=>$content, 'docs'=>$this->docs]);
+		$vars['content'] = $content;
+		$vars['docs'] = $this->docs;
+		if($return){
+			return $this->renderAsString('template', $vars);
 		}else{
-			$this->render('template',['content'=>$content, 'docs'=>$this->docs]);
+			$this->render('template', $vars);
 		}
 	}
 });
@@ -41,16 +41,6 @@ $app->helper->register('as_path', function($path){
 
 $app->helper->register('as_title', function($path){
 	return str_replace('_', ' ', $this->helper->strip_num($path));
-});
-
-$app->helper->register('is_current_folder', function($folder){
-	if(empty($this->params->folder)) return false;
-	return $this->as_path($this->params->folder) == $folder;
-});
-
-$app->helper->register('is_current_article', function($folder, $article){
-	if(empty($this->params->article)) return false;
-	return $this->as_path($this->params->article) == $article && $this->helper->is_current_folder($folder);
 });
 
 $app->docs = function(){
@@ -89,12 +79,15 @@ $app->param('article', function($value){
 });
 
 $app->get('/', function(){
-	$this->render_md('index') or $this->send(404);
+	$this->render_md('index',['current_folder'=>'','current_article'=>'']) or $this->send(404);
 });
 
 $app->get('/:folder/:article?', function(){
 	if($this->params->folder){
-		$this->render_md($this->params->folder, $this->params->article);
+		$this->render_md($this->params->folder.'/'.$this->params->article,[
+			'current_folder' => $this->params->folder,
+			'current_article' => $this->params->article,
+		]);
 	}else{
 		$this->send(404);
 	}
@@ -106,22 +99,30 @@ $app->cmd('export <path>', function(){
 	$to_be_process = [];
 	foreach($this->docs as $folder=>$articles){
 		if(is_int($folder)){
-			$this->log('processing %s', $articles);
-			$to_be_process[] = [$articles, $this->as_path($articles)];
+			$to_be_process[] = [$articles, ''];
 		}else{
 			foreach($articles as $article){
-				$to_be_process[] = [$folder.DIRECTORY_SEPARATOR.$article,
-					$this->as_path($folder).DIRECTORY_SEPARATOR.$this->as_path($article)];
+				$to_be_process[] = [$folder, $article];
 			}
 		}
 	}
-	$to_be_process[] = ['index','index'];
+	$to_be_process[] = ['index', ''];
 	foreach($to_be_process as $item){
-		list($article,$target_path) = $item;
-		$this->log('processing %s%s', $article, $this->config->extension);
-		$path = $get_target_path([$target_path.$this->config->export_extension]);
+		list($folder,$article) = $item;
+		if($article){ 
+			$md_path = "$folder/$article";
+			$path = $get_target_path([$this->as_path($folder),
+				$this->as_path($article).$this->config->export_extension]);
+		}else{
+			$md_path = $folder;
+			$path = $get_target_path([$this->as_path($folder).$this->config->export_extension]);
+		}
+		$this->log('processing %s%s', $md_path, $this->config->extension);
 		is_dir(dirname($path)) or mkdir(dirname($path), 0755, true);
-		file_put_contents($path, $this->render_md($article, true));
+		file_put_contents($path, $this->render_md($md_path, [
+			'current_folder' => $folder,
+			'current_article' => $article,
+		], true));
 	}
 	if($this->params->{'copy-assets'}){
 		$files = ['github.css', 'highlight.js', 'style.css'];
@@ -133,7 +134,7 @@ $app->cmd('export <path>', function(){
 })->options(['copy-assets']);
 
 if(isset($_SERVER['REQUEST_URI']) && preg_match('/\.(?:css|js|png|jpg|gif)$/', $_SERVER["REQUEST_URI"])){
-    return false;
+	return false;
 }else{ 
 	$app->run();
 }

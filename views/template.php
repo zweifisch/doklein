@@ -21,8 +21,8 @@
 						<? $folder_path = $this->as_path($folder) ?>
 						<a href="/<?= $folder_path ?>/<?= $this->as_path(current($articles))?>.html"><?= $this->as_title($folder) ?></a>
 					<? foreach($articles as $article): ?>
-						<li class="navigation-menu-article" <?= $this->is_current_folder($folder_path) ? '' : 'style="display:none"' ?> >
-							<a class="<?= $this->is_current_article($folder_path, $this->as_path($article))?'current':''?>"
+						<li class="navigation-menu-article" <?= $folder == $current_folder ? '' : 'style="display:none"' ?> >
+							<a class="<?= $article == $current_article ?'current':''?>"
 								href="/<?= $folder_path?>/<?=$this->as_path($article)?>.html"><?= $this->as_title($article) ?></a>
 						</li>
 					<? endforeach ?>
@@ -33,7 +33,12 @@
 			</ul>
 
 		</div>
-		<div class="main-content"> <?= $content ?> </div>
+		<div class="main-content">
+			<? if(!empty($current_folder)): ?>
+			<h3><?= $this->as_title($current_folder)?>: <?= $this->as_title($current_article)?></h2>
+			<? endif ?>
+			<?= $content ?>
+		</div>
 	</div>
 
 	<script type="text/javascript" src="/assets/highlight.js"></script>
