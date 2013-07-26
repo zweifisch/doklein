@@ -24,7 +24,7 @@ $app->helper->register('render_md', function(){
 	if(is_readable($path)){
 		$content = MarkdownExtended(file_get_contents($path));
 		if($asString){
-			return $this->renderAsString('template',['content'=>$content]);
+			return $this->renderAsString('template',['content'=>$content, 'docs'=>$this->docs]);
 		}else{
 			$this->render('template',['content'=>$content, 'docs'=>$this->docs]);
 		}
@@ -78,6 +78,7 @@ $app->param('folder', function($value){
 });
 
 $app->param('article', function($value){
+	$value = strstr($value, '.html', true);
 	if($this->params->folder){
 		$value = preg_quote($value);
 		$articles = $this->docs[$this->params->folder];
@@ -106,21 +107,33 @@ $app->cmd('export <path>', function(){
 	foreach($this->docs as $folder=>$articles){
 		if(is_int($folder)){
 			$this->log('processing %s', $articles);
-			$to_be_process[] = $articles;
+			$to_be_process[] = [$articles, $this->as_path($articles)];
 		}else{
 			foreach($articles as $article){
-				$to_be_process[] = $folder.DIRECTORY_SEPARATOR.$article;
+				$to_be_process[] = [$folder.DIRECTORY_SEPARATOR.$article,
+					$this->as_path($folder).DIRECTORY_SEPARATOR.$this->as_path($article)];
 			}
 		}
 	}
-	foreach($to_be_process as $article)
-	{
+	$to_be_process[] = ['index','index'];
+	foreach($to_be_process as $item){
+		list($article,$target_path) = $item;
 		$this->log('processing %s%s', $article, $this->config->extension);
-		$path = $get_target_path([$article.$this->config->export_extension]);
+		$path = $get_target_path([$target_path.$this->config->export_extension]);
 		is_dir(dirname($path)) or mkdir(dirname($path), 0755, true);
 		file_put_contents($path, $this->render_md($article, true));
 	}
-	
-});
+	if($this->params->{'copy-assets'}){
+		$files = ['github.css', 'highlight.js', 'style.css'];
+		is_dir($get_target_path(['assets'])) or mkdir($get_target_path(['assets']), 0755, true);
+		foreach($files as $file){
+			copy('assets'.DIRECTORY_SEPARATOR.$file, $get_target_path(['assets',$file]));
+		}
+	}
+})->options(['copy-assets']);
 
-$app->run();
+if(isset($_SERVER['REQUEST_URI']) && preg_match('/\.(?:css|js|png|jpg|gif)$/', $_SERVER["REQUEST_URI"])){
+    return false;
+}else{ 
+	$app->run();
+}

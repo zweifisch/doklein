@@ -19,11 +19,11 @@
 				<li class="navigation-menu-folder">
 					<ul>
 						<? $folder_path = $this->as_path($folder) ?>
-						<a href="/<?= $folder_path ?>"><?= $this->as_title($folder) ?></a>
+						<a href="/<?= $folder_path ?>/<?= $this->as_path(current($articles))?>.html"><?= $this->as_title($folder) ?></a>
 					<? foreach($articles as $article): ?>
 						<li class="navigation-menu-article" <?= $this->is_current_folder($folder_path) ? '' : 'style="display:none"' ?> >
 							<a class="<?= $this->is_current_article($folder_path, $this->as_path($article))?'current':''?>"
-								href="/<?= $folder_path?>/<?=$this->as_path($article)?>"><?= $this->as_title($article) ?></a>
+								href="/<?= $folder_path?>/<?=$this->as_path($article)?>.html"><?= $this->as_title($article) ?></a>
 						</li>
 					<? endforeach ?>
 					</ul>
