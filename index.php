@@ -79,7 +79,7 @@ $app->param('article', function($value){
 });
 
 $app->get('/', function(){
-	$this->render_md('index',['current_folder'=>'','current_article'=>'']) or $this->send(404);
+	$this->render_md('index',['current_folder'=>'','current_article'=>'', 'root'=>'']) or $this->send(404);
 });
 
 $app->get('/:folder/:article?', function(){
@@ -87,6 +87,7 @@ $app->get('/:folder/:article?', function(){
 		$this->render_md($this->params->folder.'/'.$this->params->article,[
 			'current_folder' => $this->params->folder,
 			'current_article' => $this->params->article,
+			'root' => '../',
 		]);
 	}else{
 		$this->send(404);
@@ -120,8 +121,9 @@ $app->cmd('export <path>', function(){
 		$this->log('processing %s%s', $md_path, $this->config->extension);
 		is_dir(dirname($path)) or mkdir(dirname($path), 0755, true);
 		file_put_contents($path, $this->render_md($md_path, [
-			'current_folder' => $folder,
+			'current_folder' => $article ? $folder : '',
 			'current_article' => $article,
+			'root' => $article ? '../' : '',
 		], true));
 	}
 	if($this->params->{'copy-assets'}){
