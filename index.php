@@ -59,6 +59,10 @@ $app->docs = function(){
 	return $ret;
 };
 
+$app->links = function(){
+	return isset($this->config->links) ? $this->config->links : [];
+};
+
 $app->param('folder', function($value){
 	$folders = array_keys($this->docs);
 	$value = preg_quote($value);
@@ -77,7 +81,10 @@ $app->param('article', function($value){
 });
 
 $app->get('/', function(){
-	$this->render_md('index',['current_folder'=>'','current_article'=>'', 'root'=>'']) or $this->send(404);
+	$this->render_md('index',[
+		'current_folder'=>'',
+		'current_article'=>'',
+		'root'=>'']) or $this->send(404);
 });
 
 $app->get('/:article', function(){

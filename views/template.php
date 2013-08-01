@@ -34,6 +34,14 @@
 			<? endforeach ?>
 			</ul>
 
+			<ul class="menu-links">
+				<? foreach($this->links as $text=>$href):?>
+				<li>
+					<a href="<?=$href?>"><?=$text?></a>
+				</li>
+				<? endforeach ?>
+			</ul>
+
 		</div>
 		<div class="main-content">
 			<? if(!empty($current_article)): ?>

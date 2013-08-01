@@ -1,5 +1,7 @@
-<?
 
+`configs.php`
+
+```php
 return [
 	'extension' => '.md',
 	'folder' => 'doc',
@@ -7,5 +9,6 @@ return [
 	'links' => [
 		'Home'=> 'http://zweifisch.github.io/doklein/',
 		'GitHub Repo'=> 'https://github.com/zweifisch/doklein',
-	]
+	],
 ];
+```
