@@ -16,7 +16,7 @@
 			<? if(is_string($articles)): ?>
 				<li class="navigation-menu-folder">
 					<a class="<?= $articles == $current_article ?'current':''?>"
-						href="<?= $root?><?= $this->as_path($articles)?>"><?= $this->as_title($articles)?></a></li>
+						href="<?= $root?><?= $this->as_path($articles)?>.html"><?= $this->as_title($articles)?></a></li>
 			<? else: ?>
 				<li class="navigation-menu-folder">
 					<ul>

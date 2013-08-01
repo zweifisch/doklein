@@ -104,8 +104,8 @@ $app->cmd('export <path>', function(){
 	$this->log('exporting to %s', $this->params->path);
 	$to_be_process = [];
 	foreach($this->docs as $folder=>$articles){
-		if(is_int($folder)){
-			$to_be_process[] = [$articles, ''];
+		if(is_string($articles)){
+			$to_be_process[] = ['', $articles];
 		}else{
 			foreach($articles as $article){
 				$to_be_process[] = [$folder, $article];
@@ -115,20 +115,20 @@ $app->cmd('export <path>', function(){
 	$to_be_process[] = ['index', ''];
 	foreach($to_be_process as $item){
 		list($folder,$article) = $item;
-		if($article){ 
+		if($folder){ 
 			$md_path = "$folder/$article";
 			$path = $get_target_path([$this->as_path($folder),
 				$this->as_path($article).$this->config->export_extension]);
 		}else{
-			$md_path = $folder;
-			$path = $get_target_path([$this->as_path($folder).$this->config->export_extension]);
+			$md_path = $article;
+			$path = $get_target_path([$this->as_path($article).$this->config->export_extension]);
 		}
 		$this->log('processing %s%s', $md_path, $this->config->extension);
 		is_dir(dirname($path)) or mkdir(dirname($path), 0755, true);
 		file_put_contents($path, $this->render_md($md_path, [
-			'current_folder' => $article ? $folder : '',
+			'current_folder' => $folder,
 			'current_article' => $article,
-			'root' => $article ? '../' : '',
+			'root' => $folder ? '../' : '',
 		], true));
 	}
 	if($this->params->{'copy-assets'}){
