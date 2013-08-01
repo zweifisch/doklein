@@ -35,7 +35,7 @@
 		</div>
 		<div class="main-content">
 			<? if(!empty($current_folder)): ?>
-			<h3><?= $this->as_title($current_folder)?>: <?= $this->as_title($current_article)?></h3>
+			<h1><?= $this->as_title($current_folder)?>: <?= $this->as_title($current_article)?></h1>
 			<? endif ?>
 			<?= $content ?>
 		</div>
