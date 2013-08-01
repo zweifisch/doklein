@@ -119,7 +119,7 @@ $app->cmd('export <path>', function(){
 			}
 		}
 	}
-	$to_be_process[] = ['index', ''];
+	$to_be_process[] = ['', 'index'];
 	foreach($to_be_process as $item){
 		list($folder,$article) = $item;
 		if($folder){ 
@@ -134,7 +134,7 @@ $app->cmd('export <path>', function(){
 		is_dir(dirname($path)) or mkdir(dirname($path), 0755, true);
 		file_put_contents($path, $this->render_md($md_path, [
 			'current_folder' => $folder,
-			'current_article' => $article,
+			'current_article' => $article == 'index' ? '':$article,
 			'root' => $folder ? '../' : '',
 		], true));
 	}
