@@ -15,35 +15,49 @@
 										<li class="navigation-menu-folder">
 					<ul>
 												<a href="../tutorial/getting_started.html">Tutorial</a>
-											<li class="navigation-menu-article" style="display:none" >
+											<li class="navigation-menu-article"  >
 							<a class=""
 								href="../tutorial/getting_started.html">Getting Started</a>
 						</li>
-											<li class="navigation-menu-article" style="display:none" >
+											<li class="navigation-menu-article"  >
 							<a class=""
 								href="../tutorial/exporting_static_site.html">Exporting Static Site</a>
+						</li>
+											<li class="navigation-menu-article"  >
+							<a class="current"
+								href="../tutorial/configs.html">Configs</a>
 						</li>
 										</ul>
 				</li>
 													<li class="navigation-menu-folder">
-					<ul>
-												<a href="../miscs/how_is_it_made.html">Miscs</a>
-											<li class="navigation-menu-article"  >
-							<a class="current"
-								href="../miscs/how_is_it_made.html">How is it Made</a>
-						</li>
-										</ul>
-				</li>
+					<a class=""
+						href="../how_is_it_made.html">How is it Made</a></li>
 									</ul>
+
+			<ul class="menu-links">
+								<li>
+					<a href="http://zweifisch.github.io/doklein/">Home</a>
+				</li>
+								<li>
+					<a href="https://github.com/zweifisch/doklein">GitHub Repo</a>
+				</li>
+							</ul>
 
 		</div>
 		<div class="main-content">
-						<h3>Miscs: How is it Made</h3>
-						<p>syntax hightlights is done using <a href="http://softwaremaniacs.org/soft/highlight/">highlight.js</a>, with the 'github' theme</p>
+						<h1>Tutorial: Configs</h1>
+						<p><code>configs.php</code></p>
 
-<p>style is based on <a href="http://kevinburke.bitbucket.org/markdowncss/">markdown.css</a></p>
-
-<p>the php application is built with <a href="https://github.com/zweifisch/zf">zf</a></p>
+<pre><code class="language-php">return [
+    'extension' =&gt; '.md',
+    'folder' =&gt; 'doc',
+    'export_extension' =&gt; '.html',
+    'links' =&gt; [
+        'Home'=&gt; 'http://zweifisch.github.io/doklein/',
+        'GitHub Repo'=&gt; 'https://github.com/zweifisch/doklein',
+    ],
+];
+</code></pre>
 		</div>
 	</div>
 

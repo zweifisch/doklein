@@ -257,7 +257,6 @@ button::-moz-focus-inner {
   border: 0;
 }
 
-
 .navigation-menu{
 	float:left;
 	min-width:200px;
@@ -304,7 +303,34 @@ button::-moz-focus-inner {
 	font-weight:normal;
 }
 
+.menu-links{
+	margin-top: 20px;
+	font-size: normal;
+}
+
+.menu-links li{
+	list-style: none outside none;
+	font-weight: normal;
+}
+
 .main-content{
 	float:left;
 	width: 700px; 
+}
+
+
+h1 {
+    font-size: 32px;
+}
+h2 {
+    font-size: 24px;
+}
+h3 {
+    font-size: 21px;
+}
+h4 {
+    font-size: 18px;
+}
+h5 {
+    font-size: 15px;
 }
