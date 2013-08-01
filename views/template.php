@@ -13,8 +13,10 @@
 
 			<ul class="menu-root">
 			<? foreach($docs as $folder=>$articles): ?>
-			<? if(is_int($folder)): ?>
-				<li class="navigation-menu-folder"> <a href="<?= $root?><?= $this->as_path($articles)?>"><?= $this->as_title($articles)?></a> </li>
+			<? if(is_string($articles)): ?>
+				<li class="navigation-menu-folder">
+					<a class="<?= $articles == $current_article ?'current':''?>"
+						href="<?= $root?><?= $this->as_path($articles)?>"><?= $this->as_title($articles)?></a></li>
 			<? else: ?>
 				<li class="navigation-menu-folder">
 					<ul>
@@ -34,8 +36,8 @@
 
 		</div>
 		<div class="main-content">
-			<? if(!empty($current_folder)): ?>
-			<h1><?= $this->as_title($current_folder)?>: <?= $this->as_title($current_article)?></h1>
+			<? if(!empty($current_article)): ?>
+			<h1><?= empty($current_folder) ? '' : $this->as_title($current_folder).':'?> <?= $this->as_title($current_article)?></h1>
 			<? endif ?>
 			<?= $content ?>
 		</div>

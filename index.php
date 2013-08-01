@@ -50,7 +50,7 @@ $app->docs = function(){
 			if(in_array($file, ['.', '..', 'index'.$this->config->extension])) continue;
 			is_dir($dir.DIRECTORY_SEPARATOR.$file)
 				? $walk_dir($dir.DIRECTORY_SEPARATOR.$file, $ret[$file])
-				: $ret[] = basename($file, $this->config->extension);
+				: $ret[$file] = basename($file, $this->config->extension);
 		}
 		asort($ret);
 	};
@@ -69,12 +69,10 @@ $app->param('folder', function($value){
 
 $app->param('article', function($value){
 	$value = strstr($value, '.html', true);
-	if($this->params->folder){
-		$value = preg_quote($value);
-		$articles = $this->docs[$this->params->folder];
-		foreach($articles as $article){
-			if(preg_match("/\d+_$value/i", $article)) return $article;
-		}
+	$articles = empty($this->params->folder) ? $this->docs : $this->docs[$this->params->folder];
+	$value = preg_quote($value);
+	foreach($articles as $article){
+		if(is_string($article) && preg_match("/\d+_$value/i", $article)) return $article;
 	}
 });
 
@@ -82,7 +80,14 @@ $app->get('/', function(){
 	$this->render_md('index',['current_folder'=>'','current_article'=>'', 'root'=>'']) or $this->send(404);
 });
 
-$app->get('/:folder/:article?', function(){
+$app->get('/:article', function(){
+	$this->render_md($this->params->article, [
+		'current_folder'=>'',
+		'current_article'=>$this->params->article,
+		'root'=>'']) or $this->send(404);
+});
+
+$app->get('/:folder/:article', function(){
 	if($this->params->folder){
 		$this->render_md($this->params->folder.'/'.$this->params->article,[
 			'current_folder' => $this->params->folder,
