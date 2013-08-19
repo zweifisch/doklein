@@ -40,18 +40,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/zweifisch/zf.git",
-                "reference": "9b4cc57ab27d6b701cdac4bd30fb15b9fd729de3"
+                "reference": "e3aec1f7f916899acf08ecf0b981b8de4aaade84"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/zweifisch/zf/zipball/9b4cc57ab27d6b701cdac4bd30fb15b9fd729de3",
-                "reference": "9b4cc57ab27d6b701cdac4bd30fb15b9fd729de3",
+                "url": "https://api.github.com/repos/zweifisch/zf/zipball/e3aec1f7f916899acf08ecf0b981b8de4aaade84",
+                "reference": "e3aec1f7f916899acf08ecf0b981b8de4aaade84",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.4.0"
             },
             "require-dev": {
+                "mustache/mustache": "*",
                 "phpunit/phpunit": "3.7.*"
             },
             "type": "library",
@@ -78,7 +79,7 @@
                 "rest",
                 "router"
             ],
-            "time": "2013-07-25 09:53:55"
+            "time": "2013-08-19 14:47:42"
         }
     ],
     "packages-dev": [

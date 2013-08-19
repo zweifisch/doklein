@@ -17,17 +17,13 @@ $app->helper->register('get_path', function($path_segments){
 		implode(DIRECTORY_SEPARATOR, $path_segments);
 });
 
-$app->helper->register('render_md', function($path, $vars=[], $return=false){
+$app->helper->register('render_md', function($path, $vars=[]){
 	$path = $this->get_path(explode('/', $path)) . $this->config->extension;
 	if(is_readable($path)){
 		$content = MarkdownExtended(file_get_contents($path));
 		$vars['content'] = $content;
 		$vars['docs'] = $this->docs;
-		if($return){
-			return $this->renderAsString('template', $vars);
-		}else{
-			$this->render('template', $vars);
-		}
+		return $this->render('template', $vars);
 	}
 });
 
@@ -81,28 +77,28 @@ $app->param('article', function($value){
 });
 
 $app->get('/', function(){
-	$this->render_md('index',[
+	return $this->render_md('index',[
 		'current_folder'=>'',
 		'current_article'=>'',
-		'root'=>'']) or $this->send(404);
+		'root'=>'']);
 });
 
 $app->get('/:article', function(){
-	$this->render_md($this->params->article, [
+	return $this->render_md($this->params->article, [
 		'current_folder'=>'',
 		'current_article'=>$this->params->article,
-		'root'=>'']) or $this->send(404);
+		'root'=>'']);
 });
 
 $app->get('/:folder/:article', function(){
 	if($this->params->folder){
-		$this->render_md($this->params->folder.'/'.$this->params->article,[
+		return $this->render_md($this->params->folder.'/'.$this->params->article,[
 			'current_folder' => $this->params->folder,
 			'current_article' => $this->params->article,
 			'root' => '../',
 		]);
 	}else{
-		$this->send(404);
+		return 404;
 	}
 });
 
@@ -136,7 +132,7 @@ $app->cmd('export <path>', function(){
 			'current_folder' => $folder,
 			'current_article' => $article == 'index' ? '':$article,
 			'root' => $folder ? '../' : '',
-		], true));
+		]));
 	}
 	if($this->params->{'copy-assets'}){
 		$files = ['github.css', 'highlight.js', 'style.css'];
